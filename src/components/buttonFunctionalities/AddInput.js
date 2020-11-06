@@ -30,13 +30,18 @@ class AddInput extends React.Component {
       handleChange(event) {
         this.setState({genre: event.target.value});
       }
+
       handleClick(event) {
         this.setInputData();
-        //window.location.reload();
 
         event.preventDefault();
       }
 
+      showErrorStatus(status, name) {
+        alert("Sorry! Your book could not be added! A problem occured");
+        console.log(status + name);
+        console.log(name);
+      }
       setInputData() {
        let inputTitle = document.getElementById("title").value;
        let inputAuthorFName = document.getElementById("authorFirstName").value;
@@ -51,9 +56,10 @@ class AddInput extends React.Component {
                 authorLastName: inputAuthorLName,
                 publication: inputPublication,
                 year : inputYear,
-            },() => {this.setStateOfAuthorId();}
+            },() => {this.sendAddAuthorRequest();}
         );
       }
+
       sendAddAuthorRequest() {
         const url = "http://localhost:59880/api/authors";
 
@@ -74,72 +80,36 @@ class AddInput extends React.Component {
         fetch(url, requestOptions)
             .then(response => {
                 if(response.status ===200) {
-                 return response.json();
+                 response.json().then(author => this.setState({authorId: author['id']}, ()=>{this.setStateOfGenreId();}));
                 }
                 else{
-                    alert("Sorry! Your book could not be added! A problem occured");
-                    console.log(response.status +"sendAddAuthorRequest");
-                    console.log("sendAddAuthorRequest");
-
+                    this.showErrorStatus(response.status,"method sendAddAuthorRequest");
                 }
 
             })
 
       }
-      setStateOfAuthorId () {
-        //console.log(this.sendAddAuthorRequest());
-        const url = "http://localhost:59880/api/authors/name/"+document.getElementById("authorLastName").value;
-        console.log("url is: "+url);
-        console.log("last name is : ",document.getElementById("authorLastName").value);
-        //  fetch(url)
-        // .then(reponse => reponse.json())
-        // .then(author => this.setState({authorId: author['id']}, ()=>{this.setStateOfGenreId();})); 
-
-        fetch(url).then((response) => {
-            if(response.status === 200){
-                console.log(response);
-                response.json()
-                  .then(author => this.setState({authorId: author['id']}, ()=>{this.setStateOfGenreId();}));
-               
-            }
-
-            else {
-                alert("Sorry! Your book could not be added! A problem occured");
-                console.log(response.status);
-                console.log("in setStateOfAuthorId");
-            }
-        });
-    }
 
       setStateOfGenreId() {
         const url = "http://localhost:59880/api/genres/name/"+this.state.genre;
         console.log("url for genre : "+url);
-
-        //  fetch(url)
-        // .then(response => response.json())
-        // .then(genre => this.setState({genreId: genre['id']},()=>{this.sendPostRequest(); window.location.reload();}));
 
         fetch(url).then((response) =>{
             if(response.status === 200){
                 response.json()
                         .then(genre => this.setState({genreId: genre['id']},()=>{
                                 this.sendPostRequest();
-                                window.location.reload(); 
-                                 alert("Book added successfully!")}));
+                            }));
                         }
-
             else {
-                alert("Sorry! Your book could not be added! A problem occured");
-                console.log(response.status);
-                console.log("setStateGenreId");
-
+                this.showErrorStatus(response.status,"method setStateGenreId");
             }
         }
         )
 
       }
 
-      sendPostRequest() {
+    sendPostRequest() {
         
         const requestOptions = {
             method: 'POST',
@@ -161,23 +131,19 @@ class AddInput extends React.Component {
         fetch('http://localhost:59880/api/books', requestOptions)
             .then(response => {
                 if(response.status ===200) {
-                response.json();
+                    response.json();
+                    window.location.reload();
+                     alert("Book added successfully!");
+
                 }
                 else{
-                    alert("Sorry! Your book could not be added! A problem occured");
-                    console.log(response.status);
-                    console.log("sendPostRequest");
-
+                    this.showErrorStatus(response.status,"method sendPostRequest");
                 }
 
             })
-           
-            //.then(data => this.setState({ postId: data.id }));
-        
-      }
+    }    
     
-    
-    render(){ 
+    render() { 
         const genres = this.state.genres.map( genre => {
             return <GenreItem key={genre["name"]} genre = {genre}/>
          });

@@ -13,8 +13,6 @@ class DeleteBar extends React.Component{
     onClickHandle = () => {
         console.log("print somethin  "+this.props.selectedBook['title']);
 
-        //alert are you sure you want to delete the following book on yes sendDeleterequest
-
         this.sendDeleteRequest();
         window.location.reload();
         alert("Your book was deleted successfully!");
@@ -35,12 +33,10 @@ class DeleteBar extends React.Component{
         
         let url = 'http://localhost:59880/api/books/'+this.props.selectedBook['id'];
 
-        // fetch(url, requestOptions)
-        //     .then(response => response.json());
-
         fetch(url, requestOptions).then((response) =>{
             if(response.status === 200){
                 response.json();
+                
             }
 
             else {
