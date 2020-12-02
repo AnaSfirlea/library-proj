@@ -1,8 +1,7 @@
-import './AddInputStyle.css';
 import React from 'react';
-import GenreItem from '../genreList/GenreItem';
-
-class AddInput extends React.Component {
+import GenreItem from '../genreItem/GenreItem';
+import Label from '../utils/Label';
+class AddForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -15,52 +14,54 @@ class AddInput extends React.Component {
             authorId: 0,
             genreId: 0,
             year: 0
-    };
+        };
     
         this.handleChange = this.handleChange.bind(this);
         this.handleClick = this.handleClick.bind(this);
-      }
+    }
 
-      componentDidMount() {
+
+    componentDidMount() {
         fetch('http://localhost:59880/api/genres')
           .then(response => response.json())
           .then(genres => this.setState({ genres: genres, genre: genres[0]['name'], genreId: genres[0]['id']}));
       }
     
-      handleChange(event) {
+    handleChange(event) {
         this.setState({genre: event.target.value});
-      }
+    }
 
-      handleClick(event) {
+    handleClick(event) {
         this.setInputData();
 
         event.preventDefault();
-      }
+    }
 
-      showErrorStatus(status, name) {
+    showErrorStatus(status, name) {
         alert("Sorry! Your book could not be added! A problem occured");
         console.log(status + name);
         console.log(name);
-      }
-      setInputData() {
-       let inputTitle = document.getElementById("title").value;
-       let inputAuthorFName = document.getElementById("authorFirstName").value;
-       let inputAuthorLName = document.getElementById("authorLastName").value;
-       let inputPublication = document.getElementById("publication").value;
-       let inputYear = Number(document.getElementById("year").value);
-
+    }
+    
+    setInputData() {
+        let inputYear = document.getElementById("addYearInput").value;
+        if(isNaN(inputYear))
+        {
+            alert("The year is not a valid number. Please enter a valid year.");
+            return;
+        }
         this.setState(
             {
-                title: inputTitle,
-                authorFirstName: inputAuthorFName,
-                authorLastName: inputAuthorLName,
-                publication: inputPublication,
-                year : inputYear,
+                title: document.getElementById("addTitleInput").value,
+                authorFirstName: document.getElementById("addAuthorFNameInput").value,
+                authorLastName: document.getElementById("addAuthorLNameInput").value,
+                publication: document.getElementById("addPublicationInput").value,
+                year : Number(document.getElementById("addYearInput").value),
             },() => {this.sendAddAuthorRequest();}
         );
-      }
+    }
 
-      sendAddAuthorRequest() {
+    sendAddAuthorRequest() {
         const url = "http://localhost:59880/api/authors";
 
         const requestOptions = {
@@ -70,11 +71,11 @@ class AddInput extends React.Component {
                 'Accept': 'application/json',
                 'Access-Control-Allow-Headers' : '*',
                 'Access-Control-Allow-Origin' : '*',
-         },
+            },
             body: JSON.stringify({
-                 firstName: document.getElementById("authorFirstName").value,
-                 lastName: document.getElementById("authorLastName").value
-                })
+                 firstName: document.getElementById("addAuthorFNameInput").value,
+                 lastName: document.getElementById("addAuthorLNameInput").value
+            })
         };
 
         fetch(url, requestOptions)
@@ -85,12 +86,11 @@ class AddInput extends React.Component {
                 else{
                     this.showErrorStatus(response.status,"method sendAddAuthorRequest");
                 }
+            }
+        )
+    }
 
-            })
-
-      }
-
-      setStateOfGenreId() {
+    setStateOfGenreId() {
         const url = "http://localhost:59880/api/genres/name/"+this.state.genre;
         console.log("url for genre : "+url);
 
@@ -104,13 +104,10 @@ class AddInput extends React.Component {
             else {
                 this.showErrorStatus(response.status,"method setStateGenreId");
             }
-        }
-        )
-
-      }
+        })
+    }
 
     sendPostRequest() {
-        
         const requestOptions = {
             method: 'POST',
             headers: { 
@@ -127,7 +124,7 @@ class AddInput extends React.Component {
                  year: this.state.year
                 })
         };
-
+        
         fetch('http://localhost:59880/api/books', requestOptions)
             .then(response => {
                 if(response.status ===200) {
@@ -137,9 +134,8 @@ class AddInput extends React.Component {
 
                 }
                 else{
-                    this.showErrorStatus(response.status,"method sendPostRequest");
+                    this.showErrorStatus(response.status," method sendPostRequest");
                 }
-
             })
     }    
     
@@ -149,46 +145,29 @@ class AddInput extends React.Component {
          });
 
         return (
-            <div id="addForm" className="d-none form-style">
+            <div id="addForm" className="d-none form-style form-element">
                 <form id="addInnerForm" autoComplete="off">
-                    <label htmlFor="title">
-                        <span>Title:</span>
-                    <input type="text" id="title" name="title" className="input-field"/>
-                    </label>
-                    <br/>
-                    <label htmlFor="authorFirstName">
-                        <span>Author First Name:</span>
-                    <input type="text" id="authorFirstName" name="authorFirstName" className="input-field"/>
-                    </label>
-                    <br/>
-                    <label htmlFor="authorLastName">
-                        <span>Author Last Name:</span>
-                    <input type="text" id="authorLastName" name="authorLastName" className="input-field"/>
-                    </label>
-                    <br/>
-                    <label htmlFor="genre">
-                        <span>Choose genre:</span>
-                        <select value={this.state.genre} onChange={this.handleChange} className="input-field" >
-                        {genres}
-                        </select>
-                    </label>
-                    <br/>
-                    <label htmlFor="publication">
-                        <span>Publication:</span>
-                    <input type="text" id="publication" name="publication" className="input-field"/>
-                    </label>
-                    <br/>
-                    <label htmlFor="year">
-                        <span>Year:</span>
-                    <input type="text" id="year" name="year" className="input-field"/>
-                    </label>
+                    <Label htmlFor="title" spanText="Title:" inputId="addTitleInput"  inputName="addTitleInput"/>
+                    <Label htmlFor="authorFName" spanText="Author First Name:" inputId="addAuthorFNameInput"  inputName="addAuthorFNameInput"/>
+                    <Label htmlFor="authorLName" spanText="Author Last Name:" inputId="addAuthorLNameInput"  inputName="addAuthorLNameInput"/>
+                    <div>
+                        <label htmlFor="genre">
+                            <span>Choose genre:</span>
+                            <select value={this.state.genre} onChange={this.handleChange} className="input-field" >
+                            {genres}
+                            </select>
+                        </label>
+                        <br/>
+                    </div>
+                    <Label htmlFor="publication" spanText="Publication:" inputId="addPublicationInput"  inputName="addPublicationInput"/>
+                    <Label htmlFor="year" spanText="Year:" inputId="addYearInput"  inputName="addYearInput"/>
                 </form>
                 <button onClick={this.handleClick} className="small-button">
                     Add
-                    </button>
+                </button>
             </div>
     );
     }
 }
 
-export default AddInput;
+export default AddForm;

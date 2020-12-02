@@ -1,9 +1,7 @@
 import './BookTableStyle.css';
-import BookList from '../bookList/BookList';
+import BookRow from '../bookRow/BookRow';
 import React from 'react';
-
 class BookTable extends React.Component {
-    
     constructor(props) {
         super(props);
 
@@ -16,26 +14,20 @@ class BookTable extends React.Component {
         fetch('http://localhost:59880/api/books')
           .then(response => response.json())
           .then(books => this.setState({ books }));
-      }
-
-    callBackForSelectedBook = (selectedBook) => {
-       // console.log("in book table "+ selectedBook["title"]);
-
-        this.sendSelectedBookToApp(selectedBook);
-        //this.setState({selectedBook: selectedBookList});
     }
 
+    callBackForSelectedBook = (selectedBook) => {
+        this.sendSelectedBookToApp(selectedBook);
+    }
     
     sendSelectedBookToApp = (book) => {
-       // console.log("in send selected  table "+ book["title"]);
-
         this.props.appCallBackForSelectedBook(book);
     }
     
     render() {
-        
-        let bookList = this.state.books;
-       
+        const books = this.state.books.map( book => {
+            return <BookRow key={book["title"]+book['id']} book = {book} bookListCallBack={this.callBackForSelectedBook}/>
+         });
         return (
             <table className="book-table" id="book-table">
                 <tr>
@@ -44,9 +36,10 @@ class BookTable extends React.Component {
                     <th>Genre</th>
                     <th>Publication</th>
                     <th>Year</th>
+                    <th>Delete</th>
+                    <th>Select</th>
                 </tr>
-                 <BookList books = {bookList} bookTableCallBack={this.callBackForSelectedBook}/>
-                
+                <tbody>{books}</tbody>
             </table>
         );
     }

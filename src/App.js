@@ -1,14 +1,11 @@
 import './App.css';
 import BookTable from './components/bookTable/BookTable';
-import ButtonAdd from './components/buttons/ButtonAdd';
-import ButtonDelete from './components/buttons/ButtonDelete';
-import ButtonSearch from './components/buttons/ButtonSearch';
-import ButtonUpdate from './components/buttons/ButtonUpdate';
-import AddInput from './components/buttonFunctionalities/AddInput';
-import DeleteBar from './components/buttonFunctionalities/DeleteBar';
+import AddForm from './components/buttonFunctionalities/AddForm.js';
 import React from 'react';
 import UpdateForm from './components/buttonFunctionalities/UpdateForm';
 import SearchBar from './components/buttonFunctionalities/SearchBar';
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import Button from './components/utils/Button';
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -20,23 +17,35 @@ class App extends React.Component {
   getSelectedBookHere = (book) => {
       this.setState({selectedBook: book}, this.sendBook);
   }
+
+  // getBooksToDelete = () => {
+  //     this.setState
+  // }
+
   render() {
-    
     return (
-      <div className="App">
-        <div className = "book-table-div split">
-          <BookTable className = "book-table" appCallBackForSelectedBook={this.getSelectedBookHere}/>
+      <div className="app">
+        <div className="background-color" >
+          <div className = "container books" >
+            <BookTable className = "book-table" appCallBackForSelectedBook={this.getSelectedBookHere}/>
+            <div className = "deleteBooks-div">
+              <button buttonId="deleteBookButton" className="button-elements" booksToDelete={this.getBooksToDelete}>Delete selected books</button>
+            </div>
+          </div>
         </div>
-        <div className= "buttons-div split">
-          <ButtonAdd className="button-add"/>
-          <AddInput/>
-          <ButtonSearch/>
-          <SearchBar/>
-          <ButtonUpdate/>
-          <UpdateForm selectedBook = {this.state.selectedBook}/>
-          <ButtonDelete/>
-          <DeleteBar selectedBook = {this.state.selectedBook}/>
+        <div className= "container buttons">
+           <div className = "top">
+             <Button formId="addForm" buttonId="addBookButton" buttonText="Add book"/>
+             <Button formId="searchBar" buttonId="searchBookButton" buttonText="Search book"/>
+             <Button formId="updateForm" buttonId="updateBookButton" buttonText="Update book"/>
+           </div>
+           <div className="bottom">
+             <AddForm/>
+             <SearchBar/>
+             <UpdateForm selectedBook = {this.state.selectedBook}/>
+           </div>
         </div>
+        <NotificationContainer/>
       </div>
     );
   }

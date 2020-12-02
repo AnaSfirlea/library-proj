@@ -1,19 +1,10 @@
-.App {
-  display: flexbox;
+.background-color {
+  /* background-image: url(library.jpg); */
 }
-
-.split {
-  height: 100%;
-  width: 50%;
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  overflow-x: hidden;
-  padding-top: 20px;
+body {
+  background-color: #ececec;
 }
-
 .book-table-div {
-  left: 0;
   width: 50%;
 }
 
@@ -23,6 +14,63 @@
 }
 
 .d-none {
-  display: none;
+  display: none!important;
 }
-/* If you want the content centered horizontally and vertically */
+
+.deleteBooks-div {
+  width: 100%;
+  display: flex;
+  padding-top: 15px;
+  justify-content: flex-end;
+}
+
+.deleteBooks-div button {
+  margin-right: 1px;
+  padding-right: 30px;
+  padding-left: 30px;
+}
+ 
+input[type="checkbox"] { /* change "blue" browser chrome to yellow */
+  cursor: pointer;
+  filter: hue-rotate(333deg);
+  opacity: 0.6;
+}
+
+.container {
+  max-width: 1200px;
+  margin: auto;
+}
+
+.background-color {
+  background-color: white;
+  padding: 50px 0;
+}
+
+.container.buttons {
+  padding-top: 50px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.container.buttons .top {
+  display: flex;
+    flex: 0 0 30%;
+    flex-direction: column;
+}
+
+.container.buttons .top button {
+  flex: 0 0 30%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-height: 50px;
+  margin-bottom: 15px;
+  padding: 20px;
+}
+
+.container.buttons .bottom {
+  display: flex;
+  padding-bottom: 50px;
+  flex: 0 0 65%;
+}
+

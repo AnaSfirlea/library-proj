@@ -1,31 +1,38 @@
-.form-style{
-    margin-top: 20px;
-	max-width: 500px;
-	padding: 20px 12px 10px 20px;
+.form-style {
     font-family: 'Roboto', sans-serif;
     font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 2.5px;
-    font-weight: 500;
-    color: rgb(128, 128, 128);
-    margin-left: 80px;
+    color: black;
+    width: 100%;
 }
 
+.form-style form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.form-style form div {
+    flex: 0 0 49%;
+}
 #searchedBookForm {
     margin-top:  45px;
 }
-
-label{
+#searchedBookForm input{
+    pointer-events: none;
+    background-color: #f8f8f8;
+}
+label {
 	display: block;
-	margin: 0px 0px 15px 0px;
+    margin: 0px 0px 15px 0px;
+    font-size: 13px;
 }
-label > span{
-	width: 120px;
-	font-weight: bold;
-	float: left;
-	padding-top: 8px;
-	padding-right: 5px;
+
+label > span {
+    width: 100%;
+    display: block;
+    padding-bottom: 5px;
 }
+
 .span-update {
     width: 120px;
 	font-weight: bold;
@@ -33,45 +40,36 @@ label > span{
 	padding-top: 20px;
 	padding-right: 5px;
 }
-input.input-field, .select-field{
+
+input.input-field, .select-field {
 	width: 48%;	
 }
+
 input.input-field, 
-.select-field, select{
+.select-field, select {
 	box-sizing: border-box;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
-	border:none;
-	box-shadow: 1px 1px 4px #EBEBEB;
-	-moz-box-shadow: 1px 1px 4px #EBEBEB;
-	-webkit-box-shadow: 1px 1px 4px #EBEBEB;
-	border-radius: 3px;
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
+	border:1px solid white;
 	padding: 7px;
     outline: none;
-    background-color:  rgb(202, 247, 226);
+    background-color:  white;
 }
+
 input.input-field:focus, 
-.select-field:focus, select{
+.select-field:focus, select {
     border: 1px solid  rgba(0, 0, 0, 0.1);
-    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
-
 }
 
-input[type=text] ,input[type=search], select{
+input[type=text] ,input[type=search], select {
+    width: 100%;
     border: none;
-    border-bottom: ridge;
-    margin: auto;
-    width: 60%;
-    border:none;
     padding: 10px;
-    border-radius: 5px;
     font-family: 'Roboto', sans-serif;
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 2.5px;
+    font-size: 13px;
     font-weight: 500;
-    color: rgb(128, 128, 128);
+    color: black;
+    border:1px solid white;
 }
+
 
